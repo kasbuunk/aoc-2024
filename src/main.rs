@@ -1,11 +1,12 @@
 use std::{fs::File, io::Read};
 
 mod day1;
+mod day2;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let solutions = vec![
         crate::day1::solution(&load_data("day1")?)?,
-        // crate::day2::solution(&load_data("day2")?)?,
+        crate::day2::solution(&load_data("day2")?)?,
     ];
 
     let solutions_report: String = solutions

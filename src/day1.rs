@@ -123,12 +123,19 @@ mod tests {
             },
         ];
         for test_case in test_cases {
-            let output = puzzle_a(&test_case.input).expect("calculation a failed");
+            let output_a = puzzle_a(&test_case.input).expect("calculation a failed");
             assert_eq!(
-                test_case.expected_output_a, output,
+                test_case.expected_output_a, output_a,
                 "input: {:?}",
                 test_case.input
-            )
+            );
+
+            let output_b = puzzle_b(&test_case.input).expect("calculation b failed");
+            assert_eq!(
+                test_case.expected_output_b, output_b,
+                "input: {:?}",
+                test_case.input
+            );
         }
     }
 }
