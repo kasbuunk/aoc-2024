@@ -6,18 +6,7 @@ pub fn solution(data: &str) -> Result<(u32, u32), Box<dyn std::error::Error>> {
 }
 
 fn puzzle_a(data: &str) -> Result<u32, Box<dyn std::error::Error>> {
-    let pairs: Vec<(u32, u32)> = data.lines().map(extract_numbers).collect();
-
-    let mut first_list = pairs
-        .clone()
-        .into_iter()
-        .map(|(x, _)| x)
-        .collect::<Vec<u32>>();
-    let mut second_list = pairs
-        .clone()
-        .into_iter()
-        .map(|(_, y)| y)
-        .collect::<Vec<u32>>();
+    let (mut first_list, mut second_list) = pair_of_lists(data);
 
     first_list.sort();
     second_list.sort();
@@ -32,7 +21,31 @@ fn puzzle_a(data: &str) -> Result<u32, Box<dyn std::error::Error>> {
 }
 
 fn puzzle_b(data: &str) -> Result<u32, Box<dyn std::error::Error>> {
-    todo!("implement me")
+    let (first_list, second_list) = pair_of_lists(data);
+
+    let result = first_list
+        .into_iter()
+        .map(|n| n * second_list.iter().filter(|n2| n == **n2).count() as u32)
+        .sum();
+
+    Ok(result)
+}
+
+fn pair_of_lists(data: &str) -> (Vec<u32>, Vec<u32>) {
+    let pairs: Vec<(u32, u32)> = data.lines().map(extract_numbers).collect();
+
+    let first_list = pairs
+        .clone()
+        .into_iter()
+        .map(|(x, _)| x)
+        .collect::<Vec<u32>>();
+    let second_list = pairs
+        .clone()
+        .into_iter()
+        .map(|(_, y)| y)
+        .collect::<Vec<u32>>();
+
+    (first_list, second_list)
 }
 
 fn extract_numbers(line: &str) -> (u32, u32) {
@@ -67,6 +80,7 @@ mod tests {
     struct TestCase {
         input: String,
         expected_output_a: u32,
+        expected_output_b: u32,
     }
 
     #[test]
@@ -82,18 +96,30 @@ mod tests {
 3   3",
                 ),
                 expected_output_a: 11,
+                expected_output_b: 31,
             },
             TestCase {
                 input: String::from("0   0"),
                 expected_output_a: 0,
+                expected_output_b: 0,
             },
             TestCase {
                 input: String::from("1   2"),
                 expected_output_a: 1,
+                expected_output_b: 0,
             },
             TestCase {
                 input: String::from("2   1"),
                 expected_output_a: 1,
+                expected_output_b: 0,
+            },
+            TestCase {
+                input: String::from(
+                    "2   2
+3   2",
+                ),
+                expected_output_a: 1,
+                expected_output_b: 4,
             },
         ];
         for test_case in test_cases {
